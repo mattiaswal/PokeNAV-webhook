@@ -25,10 +25,12 @@ def accept_webhook():
         data=json.loads(request.data)
         for element in data:
                 message=element["message"]
-#                if(element["type"] == "raid"):
-#                        timeleft=int((message["raid_end"]-time.time())/60)
-#                        send_discord("!raid {} {} {}".format(message["pokemon_id"],message["gym_id"],timeleft))
-                if(element["type"] == "egg"):
+                if message["level"] < config["min_lvl"]:
+                        continue
+                if(config["filter"]["raid"] and element["type"] == "raid"):
+                        timeleft=int((message["raid_end"]-time.time())/60)
+                        send_discord("!raid {} {} {}".format(message["pokemon_id"],message["gym_id"],timeleft))
+                if(config["filter"]["egg"] and element["type"] == "egg"):
                         timeleft=int((message["raid_begin"]-time.time())/60)
                         send_discord("!egg {} \"{}\" {}".format(message["level"],message["gym_id"],timeleft))
                 print(element)
