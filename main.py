@@ -13,6 +13,7 @@ with open(filename, 'r') as f:
 
 def send_discord(message):
         webhook = DiscordWebhook(url=config["discord-webhook"], content=message)
+        print("Sending to discord: {}".format(message))
         webhook.execute()
 
 @app.route('/', methods=['GET'])
@@ -26,6 +27,7 @@ def accept_webhook():
         for element in data:
                 message=element["message"]
                 if message["level"] < config["min_lvl"]:
+                        print("To low level, ignoring")
                         continue
                 if(config["filter"]["raid"] and element["type"] == "raid"):
                         timeleft=int((message["raid_end"]-time.time())/60)
