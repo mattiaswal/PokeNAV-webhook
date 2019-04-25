@@ -25,17 +25,17 @@ def index():
 def accept_webhook():
         data=json.loads(request.data)
         for element in data:
+                print(element)
                 message=element["message"]
-                if message["level"] < config["min_lvl"]:
+                if message["level"] < int(config["filter"]["min_lvl"]):
                         print("To low level, ignoring")
                         continue
-                if(config["filter"]["raid"] and element["type"] == "raid"):
+                if(config["filter"]["raid"] and element["pokemon_id"] != 0):
                         timeleft=int((message["raid_end"]-time.time())/60)
-                        send_discord("!raid {} {} {}".format(message["pokemon_id"],message["gym_id"],timeleft))
-                if(config["filter"]["egg"] and element["type"] == "egg"):
+                        send_discord("!raid {} {} {}".format(message["pokemon_id"],message["name"],timeleft))
+                if(config["filter"]["egg"] and message["pokemon_id"] == 0):
                         timeleft=int((message["raid_begin"]-time.time())/60)
-                        send_discord("!egg {} \"{}\" {}".format(message["level"],message["gym_id"],timeleft))
-                print(element)
+                        send_discord("!egg {} \"{}\" {}".format(message["level"],message["name"],timeleft))
         return "OK"
 
 app.run(config["host"], config["port"])
