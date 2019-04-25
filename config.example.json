@@ -1,0 +1,5 @@
+{
+    discord-webhook: <YOURWEBHOOKHERE>
+    port: 8888,
+    host: 192.168.3.3
+}
